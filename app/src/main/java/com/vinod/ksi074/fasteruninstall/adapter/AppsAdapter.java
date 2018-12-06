@@ -50,7 +50,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         imageView.setImageDrawable(app.getImage());
         appName.setText(app.getAppName());
         appVersion.setText(app.getVersion());
-        appSize.setText(app.getSize());
+        appSize.setText(app.getSize() + "  MB");
         checkBox.setChecked(false);
     }
 
@@ -75,5 +75,10 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
             checkBox = itemView.findViewById(R.id.checkbox);
 
         }
+    }
+
+    public void updateList(List<AppModel> data) {
+        mApps = data;
+        notifyDataSetChanged();
     }
 }
