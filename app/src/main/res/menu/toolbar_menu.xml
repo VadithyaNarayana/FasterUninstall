@@ -3,10 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/uninstall"
+        android:icon="@drawable/delete"
+        android:title="Uninstall"
+        app:showAsAction="ifRoom"></item>
+    <item
         android:id="@+id/sortBy"
+
         android:icon="@drawable/sort"
         android:title="Sort By"
-
         app:showAsAction="ifRoom"></item>
+
 
 </menu>

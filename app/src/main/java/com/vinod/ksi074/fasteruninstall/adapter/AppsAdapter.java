@@ -1,14 +1,18 @@
 package com.vinod.ksi074.fasteruninstall.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.vinod.ksi074.fasteruninstall.R;
 import com.vinod.ksi074.fasteruninstall.model.AppModel;
@@ -18,6 +22,8 @@ import java.util.List;
 public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
 
     private List<AppModel> mApps;
+    Context context;
+    private int noOfAppsSelected;
 
     public AppsAdapter(List<AppModel> mApps) {
         this.mApps = mApps;
@@ -26,7 +32,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
     @NonNull
     @Override
     public AppsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        Context context = viewGroup.getContext();
+        context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View appView = inflater.inflate(R.layout.item_app, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(appView);
@@ -51,7 +57,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         appName.setText(app.getAppName());
         appVersion.setText(app.getVersion());
         appSize.setText(app.getSize() + "  MB");
-        checkBox.setChecked(false);
+        checkBox.setChecked(app.isChecked());
+
     }
 
     @Override
@@ -59,7 +66,27 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         return mApps.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    private void updateCount() {
+        noOfAppsSelected = 0;
+        for (AppModel model : mApps) {
+            if (model.isChecked()) {
+                Log.d("name", model.getAppName());
+                noOfAppsSelected++;
+            }
+        }
+        Intent intent = new Intent("custom-message");
+        //            intent.putExtra("quantity",Integer.parseInt(quantity.getText().toString()));
+        intent.putExtra("quantity", noOfAppsSelected);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public void updateList(List<AppModel> data) {
+        mApps = data;
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         private AppCompatImageView imageView;
         private AppCompatTextView appName;
         private AppCompatTextView appVersion;
@@ -74,11 +101,33 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
             appSize = itemView.findViewById(R.id.appSize);
             checkBox = itemView.findViewById(R.id.checkbox);
 
+            itemView.setOnClickListener(this);
+            checkBox.setOnCheckedChangeListener(this);
         }
-    }
 
-    public void updateList(List<AppModel> data) {
-        mApps = data;
-        notifyDataSetChanged();
+        @Override
+        public void onClick(View v) {
+            if (getAdapterPosition() == RecyclerView.NO_POSITION)
+                return;
+            int pos = getAdapterPosition();
+            AppModel clickedApp = mApps.get(pos);
+            clickedApp.setChecked(true);
+            Log.d("com.fullunistaller", clickedApp.getAppName());
+            checkBox.setChecked(!checkBox.isChecked());
+            updateCount();
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (getAdapterPosition() == RecyclerView.NO_POSITION)
+                return;
+            int pos = getAdapterPosition();
+            AppModel clickedApp = mApps.get(pos);
+            clickedApp.setChecked(isChecked);
+            Log.d("com.fullunistaller", clickedApp.isChecked() + "");
+            updateCount();
+        }
+
+
     }
 }

@@ -9,13 +9,24 @@ public class AppModel {
     private String version;
     private String size;
     private Drawable image;
+    private String packageName;
 
-    public AppModel(String appName, String version, String size, Drawable image, boolean isChecked) {
+    public AppModel(String appName, String version, String size, Drawable image, boolean isChecked, String packageName) {
         this.appName = appName;
         this.version = version;
         this.size = size;
         this.image = image;
         this.isChecked = isChecked;
+        this.packageName = packageName;
+
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public AppModel() {

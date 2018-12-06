@@ -9,5 +9,13 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:contentInsetStartWithNavigation="0dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    tools:menu="@menu/toolbar_menu" />
+    tools:menu="@menu/toolbar_menu">
+
+    <TextView
+        android:id="@+id/showAppcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="App count" />
+</android.support.v7.widget.Toolbar>
 
